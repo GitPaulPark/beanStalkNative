@@ -7,6 +7,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SettingDrawer from './components/drawer/SettingDrawer';
 import HomeTodo from './components/todoList/HomeTodo';
 import HomeTts from './components/tts/HomeTts';
+import Calculator from "./components/calculator/Calculator";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -105,6 +106,11 @@ function JsApp() {
           name={'Tts'}
           component={HomeTts}
           options={{title: 'TTS'}}
+        />
+        <Drawer.Screen
+          name={'Calculator'}
+          component={Calculator}
+          options={{title: '계산기'}}
         />
       </Drawer.Navigator>
     </NavigationContainer>
