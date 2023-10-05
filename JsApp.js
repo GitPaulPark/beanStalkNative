@@ -8,6 +8,7 @@ import SettingDrawer from './components/drawer/SettingDrawer';
 import HomeTodo from './components/todoList/HomeTodo';
 import HomeTts from './components/tts/HomeTts';
 import Calculator from "./components/calculator/Calculator";
+import VoiceRecorder from "./components/voiceRecorder/VoiceRecoder";
 import {Provider} from "react-redux";
 import Store from "./components/store/store"
 import CounterTest from "./components/test/CounterTest";
@@ -120,6 +121,11 @@ function JsApp() {
                     name={'StateManage'}
                     component={CounterTest}
                     options={{title: '상태관리'}}
+                />
+                <Drawer.Screen
+                    name={'VoiceRecorder'}
+                    component={VoiceRecorder}
+                    options={{title: '녹음'}}
                 />
             </Drawer.Navigator>
         </NavigationContainer>
