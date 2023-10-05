@@ -12,6 +12,7 @@ function HomeDrawer({navigation}) {
       <Button title={'Todo 열기'} onPress={() => navigation.navigate('Todo')} />
       <Button title={'Tts 열기'} onPress={() => navigation.navigate('Tts')} />
       <Button title={'계산기 열기'} onPress={() => navigation.navigate('Calculator')} />
+      <Button title={'redux 연습 열기'} onPress={() => navigation.navigate('StateManage')} />
     </View>
   );
 }
