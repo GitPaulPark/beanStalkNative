@@ -122,19 +122,14 @@ function JsApp() {
                     options={{title: '계산기'}}
                 />
                 <Drawer.Screen
-                    name={'StateManage'}
-                    component={CounterTest}
-                    options={{title: '상태관리'}}
-                />
-                <Drawer.Screen
                     name={'Mobx'}
                     component={MobxCounterTest}
-                    options={{title: 'mobx상태관리'}}
+                    options={{title: 'mobx일반상태관리'}}
                 />
                 <Drawer.Screen
                     name={'Mobx2'}
                     component={MobxCounterTest2}
-                    options={{title: 'mobx상태관리2'}}
+                    options={{title: 'mobx객체상태관리2'}}
                 />
                 <Drawer.Screen
                     name={'VoiceRecorder'}
