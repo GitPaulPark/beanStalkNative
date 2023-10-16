@@ -1,12 +1,14 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {decrease, decreaseBy, increase, increaseBy} from "../store/firstReducer";
+import {decrease, decreaseBy, increase, increaseBy} from "../store/redux/firstReducer";
 import {Button, StyleSheet, Text, View} from "react-native";
+
 
 function CounterTest () {
     const value = useSelector(state => state.counter.value);
     const dispatch = useDispatch();
     const onPressIncrease = () => {
+        console.log(":)")
             dispatch(increase());
     }
     const onPressIncreaseBy = (number) => {
@@ -23,7 +25,7 @@ function CounterTest () {
 
     return (
         <View style={styles.block}>
-            <Text style={styles.text}>navigate </Text>
+            <Text style={styles.text}>Redux Count </Text>
             <View style={styles.buttonBlock}>
                 <Button title={' - 5 '} onPress={()=>onPressDecreaseBy(5)} />
                 <Button title={' - 1 '} onPress={onPressDecrease} />

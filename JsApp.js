@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -9,14 +9,15 @@ import HomeTodo from './components/todoList/HomeTodo';
 import HomeTts from './components/tts/HomeTts';
 import Calculator from "./components/calculator/Calculator";
 import VoiceRecorder from "./components/voiceRecorder/VoiceRecoder";
-import {Provider} from "react-redux";
-import Store from "./components/store/store"
 import CounterTest from "./components/test/CounterTest";
+import MobxCounterTest from "./components/test/MobxCounterTest";
+import MobxCounterTest2 from "./components/test/MobxCounterTest2";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function JsApp() {
+
     return (
 
         <NavigationContainer>
@@ -123,6 +124,16 @@ function JsApp() {
                     options={{title: '상태관리'}}
                 />
                 <Drawer.Screen
+                    name={'Mobx'}
+                    component={MobxCounterTest}
+                    options={{title: 'mobx상태관리'}}
+                />
+                <Drawer.Screen
+                    name={'Mobx2'}
+                    component={MobxCounterTest2}
+                    options={{title: 'mobx상태관리2'}}
+                />
+                <Drawer.Screen
                     name={'VoiceRecorder'}
                     component={VoiceRecorder}
                     options={{title: '녹음'}}
@@ -149,8 +160,6 @@ const styles = StyleSheet.create({
 });
 export default () => {
     return (
-        <Provider store={Store}>
             <JsApp/>
-        </Provider>
     )
 }
