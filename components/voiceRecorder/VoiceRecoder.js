@@ -27,6 +27,7 @@ function VoiceRecorder() {
 
     const onStartPlay = async (audio) => {
         if (!!audio) {
+            console.log(audio);
             await audioRecorderPlayer.startPlayer(audio);
         } else {
             const cancelButton = {
@@ -48,16 +49,15 @@ function VoiceRecorder() {
 
     const onContentsDownload = () => {
         const downloadFileName = "test.wav";
-        axios.get('http://192.168.1.70:8080/api/external/files/audio', {
+        axios.get('http://localhost:8080/api/external/files/audio', {
             params: { selectedFileName: downloadFileName },
             headers: { 'Content-Type': 'audio/wav' },
-            responseType: 'arraybuffer',
+            responseType: 'arraybuffer'
         })
             .then(async (response) => {
-                const fileData = new Blob([response.data], { type: 'audio/wav' });
-
-                const filePath = await saveBlobToFile(RNFS.CachesDirectoryPath + '/test.wav', fileData);
-
+                const uint8Array = new Uint8Array(response.data);
+                const fileData = new Blob([uint8Array], { type: 'audio/wav' });
+                const filePath = await saveBlobToFile(RNFS.DocumentDirectoryPath + '/test.wav', fileData);
                 if (filePath) {
                     setContentsAudio(filePath);
                 }
@@ -66,9 +66,15 @@ function VoiceRecorder() {
                 console.error('Error get audio file:', error);
             });
     }
+
     const saveBlobToFile = async (filePath, fileData) => {
         try {
-            await RNFS.writeFile(filePath, fileData, 'base64');
+            await RNFS.writeFile(filePath, fileData).then((success) => {
+                console.log('FILE WRITTEN!');
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
             return filePath;
         } catch (error) {
             console.error('saveBlobToFile Error: ', error);
