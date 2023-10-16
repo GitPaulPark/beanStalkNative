@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
-import {View, StyleSheet, Text, Platform, TouchableOpacity, TouchableNativeFeedback, Vibration} from "react-native";
+import {View, StyleSheet, Text, Platform, TouchableOpacity, TouchableNativeFeedback} from "react-native";
 import InputButton from "./InputButton";
+import ReactNativeHapticFeedback from "react-native-haptic-feedback";
+
 
 const CalculatorElements = ['C', '.', '%', '/', 7, 8, 9, '*', 4, 5, 6, '-', 1, 2, 3, '+', '0', '000', '='];
 
@@ -38,7 +40,10 @@ function KeyArea({result, setResult, phoneWidth, phoneHeight, scrollToRight, tar
                 }
             }
         }
-        Vibration.vibrate(100);
+        ReactNativeHapticFeedback.trigger('selection', {
+            enableVibrateFallback: true,
+            ignoreAndroidSystemSettings: false,
+        });
         scrollToRight();
     }
 
