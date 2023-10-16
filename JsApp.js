@@ -12,6 +12,9 @@ import VoiceRecorder from "./components/voiceRecorder/VoiceRecoder";
 import CounterTest from "./components/test/CounterTest";
 import MobxCounterTest from "./components/test/MobxCounterTest";
 import MobxCounterTest2 from "./components/test/MobxCounterTest2";
+import {Provider as MobxProvider} from "mobx-react";
+import {stores} from "./AppStore";
+
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -160,6 +163,8 @@ const styles = StyleSheet.create({
 });
 export default () => {
     return (
+        <MobxProvider {...stores}>
             <JsApp/>
+        </MobxProvider>
     )
 }

@@ -2,7 +2,7 @@
 import React from 'react';
 import { makeAutoObservable } from 'mobx';
 
-class CounterStore {
+class UserStore {
     constructor() {
         this.init();
         this.willInit=false;
@@ -14,26 +14,32 @@ class CounterStore {
     }
 
     increment = () => {
-        this.count += 1;
+        this.addAge();
     }
 
     decrement = () => {
-        this.count -= 1;
+        this.minusAge();
     }
 
-    changeCounting = () => {
-        this.counterStore.counting.push("a");
+    addAge = () => {
+        this.user.age++;
+    }
+
+    minusAge = () => {
+        this.user.age--;
     }
 
 
     init = () => {
-        this.count = 0;
-        this.counterStore = {
-            counting:[]
+        this.user = {
+            name:"paul",
+            age:29,
+            height:175
         }
+
     }
 
 }
 
-export const CounterStoreContext = React.createContext(new CounterStore());
+export const UserStoreContext = React.createContext(new UserStore());
 

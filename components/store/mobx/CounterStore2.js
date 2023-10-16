@@ -7,7 +7,7 @@ class CounterStore2 {
     constructor() {
 
         this.count = 0;
-        makeAutoObservable(this, {}, { autoBind: true });
+        makeAutoObservable(this);
 
     }
 
@@ -28,10 +28,8 @@ class CounterStore2 {
 }
 
 
+const repositoryProps = {
+    serverContextPath: "",
+};
 
-// Instantiate the counter store.
-// export default CounterStore2;
-const counterStore = new CounterStore2();
-// Create a React Context with the counter store instance.
-export const CounterStoreContext = React.createContext(counterStore);
-export const useCounterStore = () => React.useContext(CounterStoreContext)
+export const CounterStoreContext2 = React.createContext(new CounterStore2(repositoryProps));

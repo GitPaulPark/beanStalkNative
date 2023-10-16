@@ -1,40 +1,42 @@
 import React, {useContext, useEffect} from "react";
 import {Button, StyleSheet, Text, View} from "react-native";
 // import ObserverWrapper from "../store/mobx/ObserverWrapper";
-import { observer } from "mobx-react";
+import {inject, observer} from "mobx-react";
 import {useCounterStore} from "../store/mobx/CounterStore";
 
 
-function MobxCounterTest2 () {
-
-    const { count, increment, decrement,changeCounting, counterStore } = useCounterStore();
+function MobxCounterTest2 (props) {
+    const userStore = props.UserStore;
+    useEffect(() => {
+        console.log("mount -");
+        console.log("counterStore2 :",userStore);
+        return () => {
+            console.log("unmount -");
+            console.log("counterStore2 :",userStore);
+        };
+    }, []);
 
 
     const onPressIncrease = () => {
         console.log("onPressIncreaseBy mobx");
-        increment();
-        changeCounting();
+        userStore.increment();
 
     }
     const onPressDecrease = () => {
         console.log("onPressDecrease mobx");
-        decrement();
+        userStore.decrement();
     }
 
     return (
         <View style={styles.block}>
-            <Text style={styles.text}>Mobx Count2 </Text>
+            <Text style={styles.text}>UserCount </Text>
             <View style={styles.buttonBlock}>
                 <Button title={' - 1 '} onPress={onPressDecrease} />
                 <Button title={' + 1 '} onPress={onPressIncrease} />
             </View>
-            <Text style={styles.smallText}> {count}</Text>
-
-            <Text style={styles.text}>Mobx Count222 </Text>
-            <View style={styles.buttonBlock}>
-                <Button title={' + 1 '} onPress={onPressIncrease} />
-            </View>
-            <Text style={styles.smallText}> {counterStore.counting.length}</Text>
+            <Text style={styles.smallText}> {userStore.user.name}</Text>
+            <Text style={styles.smallText}> {userStore.user.age}</Text>
+            <Text style={styles.smallText}> {userStore.user.height}</Text>
         </View>
     )
 };
@@ -59,4 +61,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default (observer(MobxCounterTest2));
+export default inject('UserStore')(observer(MobxCounterTest2));

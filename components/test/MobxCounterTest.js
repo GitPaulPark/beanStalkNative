@@ -2,35 +2,39 @@ import React, {useContext, useEffect} from "react";
 import {Button, StyleSheet, Text, View} from "react-native";
 // import ObserverWrapper from "../store/mobx/ObserverWrapper";
 import { inject, observer } from "mobx-react";
-import {useCounterStore} from "../store/mobx/CounterStore";
 
+function MobxCounterTest (props) {
+    const counterStore = props.counterStore;
 
-export const MobxCounterTest = observer(() => {
-        const { count, increment, decrement } = useCounterStore();
+    useEffect(() => {
+        console.log("📗 :",props.counterStore.counterStore);
+        return () => {
+        };
+    }, []);
+
+        // const { count, increment, decrement } = useCounterStore();
 
 
         const onPressIncrease = () => {
             console.log("onPressIncreaseBy mobx");
-            increment();
-            console.log()
+            counterStore.increment();
         }
         const onPressDecrease = () => {
             console.log("onPressDecrease mobx");
-            decrement();
+            counterStore.decrement();
         }
 
         return (
             <View style={styles.block}>
-                <Text style={styles.text}>Mobx Count 2  </Text>
+                <Text style={styles.text}>Mobx Count  </Text>
                 <View style={styles.buttonBlock}>
                     <Button title={' - 1 '} onPress={onPressDecrease} />
                     <Button title={' + 1 '} onPress={onPressIncrease} />
                 </View>
-                <Text style={styles.smallText}> {count}</Text>
+                <Text style={styles.smallText}> {counterStore.count}</Text>
             </View>
         )
-    });
-    // const { counterStore } = useContext(MobXProviderContext);
+    };
 
 const styles = StyleSheet.create({
     block: {
@@ -52,4 +56,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default MobxCounterTest;
+export default inject('counterStore')(observer(MobxCounterTest));
