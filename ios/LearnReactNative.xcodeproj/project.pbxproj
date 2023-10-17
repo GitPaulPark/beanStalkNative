@@ -490,7 +490,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VY284229DX;
+				DEVELOPMENT_TEAM = GYQ58K8588;
 				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = LearnReactNative/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
@@ -520,7 +520,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = VY284229DX;
+				DEVELOPMENT_TEAM = GYQ58K8588;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = LearnReactNative/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";

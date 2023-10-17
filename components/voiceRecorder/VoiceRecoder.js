@@ -57,8 +57,10 @@ function VoiceRecorder() {
     };
 
     const onContentsDownload = () => {
+        console.log("📘 onContentsDownload");
+
         const downloadFileName = "sound.m4a";
-        axios.get('http://localhost:8080/api/external/files/audio', {
+        axios.get('http://192.168.11.27:8080/api/external/files/audio', {
             params: { selectedFileName: downloadFileName },
             responseType: 'arraybuffer'
         })
@@ -74,6 +76,13 @@ function VoiceRecorder() {
                     console.log("📗 filePath:", filePath);
                     const fileLocation = "file://" + filePath;
                     console.log("📗  fileLocation :",fileLocation)
+                    try {
+                        const content = await RNFS.readFile(filePath, 'base64');
+                        console.log("📗  content :",content)
+                    } catch (e) {
+                        console.warn(e);
+
+                    }
                     setContentsAudio( fileLocation);
                 }
             })
@@ -81,48 +90,6 @@ function VoiceRecorder() {
                 console.error('Error get audio file:', error);
             });
     }
-    // const onContentsDownload = () => {
-    //     const downloadFileName = "test.wav";
-    //     axios.get('http://localhost:8080/api/external/files/audio', {
-    //         params: { selectedFileName: downloadFileName },
-    //         // headers: { 'Content-Type': 'audio/wav' },
-    //         responseType: 'arraybuffer'
-    //     })
-    //         .then(async (response) => {
-    //             setTimeout( async () => {
-    //                 console.log("📗status : ", response.status);
-    //                 console.log("📗response type : ", typeof response.request);
-    //                 Object.keys(response).forEach((key) => {
-    //                     console.log(" key : ", key);
-    //                 })
-    //                 console.log("-------------request-----------------");
-    //
-    //                 Object.keys(response.request).forEach((key) => {
-    //                     console.log("📗 key : ", key);
-    //                 })
-    //                 console.log("--------------data----------------");
-    //                 Object.keys(response.data).forEach((key) => {
-    //                     console.log("📗 key : ", key);
-    //                 })
-    //
-    //                 console.log("📗type : ", typeof response.data);
-    //                 console.log("📗DocumentDirectoryPath : ", RNFS.DocumentDirectoryPath);
-    //                 console.log("📗data : ", response.data);
-    //
-    //                 console.log("📗response : ", response);
-    //
-    //                 const filePath = await saveBlobToFile(RNFS.DocumentDirectoryPath + '/test.wav', response.data);
-    //
-    //                 // console.log(filePath)
-    //             },2000)
-    //             // if (filePath) {
-    //             //     setContentsAudio(filePath);
-    //             // }
-    //         })
-    //         .catch((error) => {
-    //             console.error('Error get audio file:', error);
-    //         });
-    // }
 
     const saveBlobToFile = async (filePath, fileData) => {
         try {

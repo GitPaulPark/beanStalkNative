@@ -6,10 +6,8 @@ import HomeDrawer from './components/drawer/HomeDrawer';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SettingDrawer from './components/drawer/SettingDrawer';
 import HomeTodo from './components/todoList/HomeTodo';
-import HomeTts from './components/tts/HomeTts';
 import Calculator from "./components/calculator/Calculator";
 import VoiceRecorder from "./components/voiceRecorder/VoiceRecoder";
-import CounterTest from "./components/test/CounterTest";
 import MobxCounterTest from "./components/test/MobxCounterTest";
 import MobxCounterTest2 from "./components/test/MobxCounterTest2";
 import {Provider as MobxProvider} from "mobx-react";
@@ -110,11 +108,6 @@ function JsApp() {
                     name={'Todo'}
                     component={HomeTodo}
                     options={{title: '투두'}}
-                />
-                <Drawer.Screen
-                    name={'Tts'}
-                    component={HomeTts}
-                    options={{title: 'TTS'}}
                 />
                 <Drawer.Screen
                     name={'Calculator'}

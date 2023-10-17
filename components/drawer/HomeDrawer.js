@@ -10,7 +10,6 @@ function HomeDrawer({navigation}) {
         onPress={() => navigation.navigate('Setting')}
       />
       <Button title={'Todo 열기'} onPress={() => navigation.navigate('Todo')} />
-      <Button title={'Tts 열기'} onPress={() => navigation.navigate('Tts')} />
       <Button title={'계산기 열기'} onPress={() => navigation.navigate('Calculator')} />
       <Button title={'Mobx 연습 열기'} onPress={() => navigation.navigate('Mobx')} />
       <Button title={'Mobx 객체 연습 열기'} onPress={() => navigation.navigate('Mobx2')} />
