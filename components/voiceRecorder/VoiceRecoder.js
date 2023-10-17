@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, Button, View, Text, Alert} from "react-native";
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 import RNFS from 'react-native-fs';
+import { fromByteArray } from 'base64-js';
 import axios from "axios";
 
 
@@ -55,8 +56,12 @@ function VoiceRecorder() {
             responseType: 'arraybuffer'
         })
             .then(async (response) => {
+                console.log("📗data :", response.data);
+                console.log("📗type :",typeof response.data);
                 const uint8Array = new Uint8Array(response.data);
-                const fileData = new Blob([uint8Array], { type: 'audio/wav' });
+                const fileData = fromByteArray(uint8Array);
+                console.log("📗 type ",typeof fileData);
+                console.log("📗 path:", RNFS.DocumentDirectoryPath);
                 const filePath = await saveBlobToFile(RNFS.DocumentDirectoryPath + '/test.wav', fileData);
                 if (filePath) {
                     setContentsAudio(filePath);
@@ -66,13 +71,56 @@ function VoiceRecorder() {
                 console.error('Error get audio file:', error);
             });
     }
+    // const onContentsDownload = () => {
+    //     const downloadFileName = "test.wav";
+    //     axios.get('http://localhost:8080/api/external/files/audio', {
+    //         params: { selectedFileName: downloadFileName },
+    //         // headers: { 'Content-Type': 'audio/wav' },
+    //         responseType: 'arraybuffer'
+    //     })
+    //         .then(async (response) => {
+    //             setTimeout( async () => {
+    //                 console.log("📗status : ", response.status);
+    //                 console.log("📗response type : ", typeof response.request);
+    //                 Object.keys(response).forEach((key) => {
+    //                     console.log(" key : ", key);
+    //                 })
+    //                 console.log("-------------request-----------------");
+    //
+    //                 Object.keys(response.request).forEach((key) => {
+    //                     console.log("📗 key : ", key);
+    //                 })
+    //                 console.log("--------------data----------------");
+    //                 Object.keys(response.data).forEach((key) => {
+    //                     console.log("📗 key : ", key);
+    //                 })
+    //
+    //                 console.log("📗type : ", typeof response.data);
+    //                 console.log("📗DocumentDirectoryPath : ", RNFS.DocumentDirectoryPath);
+    //                 console.log("📗data : ", response.data);
+    //
+    //                 console.log("📗response : ", response);
+    //
+    //                 const filePath = await saveBlobToFile(RNFS.DocumentDirectoryPath + '/test.wav', response.data);
+    //
+    //                 // console.log(filePath)
+    //             },2000)
+    //             // if (filePath) {
+    //             //     setContentsAudio(filePath);
+    //             // }
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error get audio file:', error);
+    //         });
+    // }
 
     const saveBlobToFile = async (filePath, fileData) => {
         try {
-            await RNFS.writeFile(filePath, fileData).then((success) => {
+            await RNFS.writeFile(filePath, fileData,'base64').then((success) => {
                 console.log('FILE WRITTEN!');
             })
             .catch((err) => {
+                console.warn("📕");
                 console.log(err.message);
             });
             return filePath;
