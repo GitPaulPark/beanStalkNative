@@ -17,19 +17,27 @@ function VoiceRecorder() {
     const onStartRecord = async () => {
         const result = await audioRecorderPlayer.startRecorder();
         setIsRecording(true);
-        setAudioPath(result);
+        console.log("📗 record result :",result);
+        setAudioPath("");
     };
 
     const onStopRecord = async () => {
         const result = await audioRecorderPlayer.stopRecorder();
+        console.log("📗 record stop result :",result);
         setIsRecording(false);
         setAudioPath(result);
+        console.log("📗 : ",audioPath);
     };
 
     const onStartPlay = async (audio) => {
+        console.log(audio);
         if (!!audio) {
             console.log(audio);
-            await audioRecorderPlayer.startPlayer(audio);
+            try {
+                await audioRecorderPlayer.startPlayer(audio);
+            } catch (e) {
+                console.warn(e);
+            }
         } else {
             const cancelButton = {
                 text: '확인',
@@ -49,10 +57,9 @@ function VoiceRecorder() {
     };
 
     const onContentsDownload = () => {
-        const downloadFileName = "test.wav";
+        const downloadFileName = "sound.m4a";
         axios.get('http://localhost:8080/api/external/files/audio', {
             params: { selectedFileName: downloadFileName },
-            headers: { 'Content-Type': 'audio/wav' },
             responseType: 'arraybuffer'
         })
             .then(async (response) => {
@@ -62,9 +69,12 @@ function VoiceRecorder() {
                 const fileData = fromByteArray(uint8Array);
                 console.log("📗 type ",typeof fileData);
                 console.log("📗 path:", RNFS.DocumentDirectoryPath);
-                const filePath = await saveBlobToFile(RNFS.DocumentDirectoryPath + '/test.wav', fileData);
+                const filePath = await saveBlobToFile(RNFS.DocumentDirectoryPath + '/sound.m4a', fileData);
                 if (filePath) {
-                    setContentsAudio(filePath);
+                    console.log("📗 filePath:", filePath);
+                    const fileLocation = "file://" + filePath;
+                    console.log("📗  fileLocation :",fileLocation)
+                    setContentsAudio( fileLocation);
                 }
             })
             .catch((error) => {
