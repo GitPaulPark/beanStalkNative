@@ -1,9 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Button, View, Text, Alert} from "react-native";
+import {StyleSheet, Button, View, Text, Alert, Platform, PermissionsAndroid} from "react-native";
 import AudioRecorderPlayer from 'react-native-audio-recorder-player';
 import RNFS from 'react-native-fs';
 import { fromByteArray } from 'base64-js';
 import axios from "axios";
+import {
+    AudioEncoderAndroidType,
+    AudioSourceAndroidType,
+    AVEncoderAudioQualityIOSType, AVEncodingOption
+} from "react-native-audio-recorder-player/index";
 
 
 
@@ -15,26 +20,177 @@ function VoiceRecorder() {
     const [contentsAudio, setContentsAudio] = useState('');
 
     const onStartRecord = async () => {
-        const result = await audioRecorderPlayer.startRecorder();
-        setIsRecording(true);
-        console.log("📗 record result :",result);
-        setAudioPath("");
+        let writingPermission;
+        let recordingPermission;
+
+        if (Platform.OS === 'android') {
+            try {
+                const granted = writingPermission = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                    {
+                        title: 'Permissions for write access',
+                        message: 'Give permission to your storage to write a file',
+                        buttonPositive: 'ok',
+                    },
+                );
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                    console.log('You can use the storage');
+                    console.log('writing permission : ',writingPermission);
+                } else {
+                    console.log('permission denied');
+                    return;
+                }
+            } catch (err) {
+                console.warn(err);
+                return;
+            }
+        }
+        if (Platform.OS === 'android') {
+            try {
+                const granted = recordingPermission =  await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+                    {
+                        title: 'Permissions for write access',
+                        message: 'Give permission to your storage to write a file',
+                        buttonPositive: 'ok',
+                    },
+                );
+                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                    console.log('You can use the camera');
+                    console.log('recording Permission',recordingPermission);
+                } else {
+                    console.log('permission denied');
+                    return;
+                }
+            } catch (err) {
+                console.warn("📕");
+                console.warn(err);
+                return;
+            }
+        }
+
+        const path = Platform.select({
+            ios: 'sound.m4a',
+            android: '/sdcard/Android/data/com.learnreactnative/cache/sound.mp4',
+        });
+
+        const audioSet = {
+            AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
+            AudioSourceAndroid: AudioSourceAndroidType.MIC,
+            AVEncoderAudioQualityKeyIOS: AVEncoderAudioQualityIOSType.high,
+            AVNumberOfChannelsKeyIOS: 2,
+            AVFormatIDKeyIOS: AVEncodingOption.aac,
+        };
+
+        setTimeout(async () => {
+            console.log('audioSet', audioSet);
+            try {
+                console.log("📘");
+                const rootPath = Platform.OS === 'ios'
+                    ? ''
+                    // : ``;
+                    : `${RNFS.TemporaryDirectoryPath}/sdcard`;
+                console.log("DocumentDirectoryPath :", RNFS.DocumentDirectoryPath);
+                console.log("DocumentDirectoryPath :", await RNFS.readdir(RNFS.DocumentDirectoryPath));
+                console.log("ExternalStorageDirectoryPath :", RNFS.ExternalStorageDirectoryPath);
+                console.log("ExternalStorageDirectoryPath :", await RNFS.readdir(RNFS.ExternalStorageDirectoryPath));
+                console.log("TemporaryDirectoryPath :", RNFS.TemporaryDirectoryPath);
+                console.log("TemporaryDirectoryPath :", await RNFS.readdir(RNFS.TemporaryDirectoryPath));
+                console.log("TemporaryDirectoryPath :", RNFS.TemporaryDirectoryPath+"/sdcard");
+                console.log("TemporaryDirectoryPath :", await RNFS.readdir(RNFS.TemporaryDirectoryPath+"/sdcard"));
+                console.log("TemporaryDirectoryPath :", RNFS.TemporaryDirectoryPath+"/sdcard/sound");
+                console.log("TemporaryDirectoryPath :", await RNFS.readdir(RNFS.TemporaryDirectoryPath+"/sdcard/sound"));
+
+                // console.log("rootPath : ",rootPath);
+                // const folderPath = `${rootPath}/sound`;
+                // console.log("folderPath : ",folderPath)
+                // const folderExists = await RNFS.exists(folderPath);
+                // console.log("folderExists : ",folderExists);
+
+                // if (!folderExists) {
+                //     console.warn("📙 : folder does not exist.. will be creating a new folder");
+                //     try {
+                //         console.log(writingPermission === PermissionsAndroid.RESULTS.GRANTED)
+                //         if (writingPermission === PermissionsAndroid.RESULTS.GRANTED) {
+                //             await RNFS.mkdir(folderPath);
+                //         } else {
+                //             console.warn("📙 : do not have writing permission");
+                //         }
+                //     } catch (e) {
+                //         console.log("📕 : ",e);
+                //         console.log("📕 : ",e.message);
+                //     }
+                // } else {
+                //     console.warn("📘 : folder exists already, will be moving on..");
+                // }
+                // const filePath = `${folderPath}/sound.${Platform.OS === 'ios' ? 'm4a' : 'mp4'}`;
+                // console.log("📘 filePath : ",filePath)
+                // const fileExists = await RNFS.exists(filePath);
+                // if (!fileExists) {
+                //     console.warn(`📙 : File does not exist at path: ${filePath}`);
+                // }
+
+
+                if (recordingPermission === PermissionsAndroid.RESULTS.GRANTED) {
+                    const result = await audioRecorderPlayer.startRecorder();
+                    console.log("📘📘");
+                    setIsRecording(true);
+                    console.log("📘📘📘");
+                    console.log("📗 record result :", result);
+                    setAudioPath(result);
+                } else {
+                    console.warn(`📙 : do not have recording permission`);
+                }
+            } catch (e) {
+                console.warn("📕📕");
+                console.warn(e);
+            }
+        },2000)
     };
 
     const onStopRecord = async () => {
         const result = await audioRecorderPlayer.stopRecorder();
         console.log("📗 record stop result :",result);
+        // console.log(await RNFS.exists(result));
+        // await RNFS.copyFile(result, "/data/data/com.learnreactnative/cache/sdcard/sound/sound.mp4");
+        // console.log(await RNFS.exists("/data/data/com.learnreactnative/cache/sdcard/sound/sound.mp4"));
         setIsRecording(false);
         setAudioPath(result);
-        console.log("📗 : ",audioPath);
+        console.log("📘 result stat :",RNFS.stat(result));
+        const base64Content = await RNFS.readFile(result, 'base64');
+        console.log(base64Content.length);
+        // await RNFS.writeFile("/data/data/com.learnreactnative/cache/sdcard/sound/sound.mp4", base64Content, 'base64');
+        // console.log("📗 to a new folder",await RNFS.exists("/data/data/com.learnreactnative/cache/sdcard/sound/sound.mp4"));
+        // const newBase64Content = await RNFS.readFile(result, 'base64');
+        // console.log("newBase64Content :",newBase64Content.length);
+
+
+
+
+        // console.log("📗 : ",audioPath);
+
     };
 
     const onStartPlay = async (audio) => {
         console.log(audio);
+        // const filePath = "/data/data/com.learnreactnative/cache/sdcard/sound/sound.mp4";
+        const filePath = audio;
+        console.log("📘 file stat : ",RNFS.stat(filePath));
+
+        console.log("📘 filePath : ",filePath)
+        const fileExists = await RNFS.exists(filePath);
+        console.log("📘 fileExists : ",fileExists);
+        if (!fileExists) {
+            console.warn(`📙 : File does not exist at path: ${filePath}`);
+        }
         if (!!audio) {
-            console.log(audio);
             try {
-                await audioRecorderPlayer.startPlayer(audio);
+                const path = Platform.select({
+                    ios: 'sound.m4a',
+                    android: '/data/data/com.learnreactnative/cache/sdcard/sound/sound.mp4',
+                });
+                console.log("📗 filePath: ",filePath);
+                await audioRecorderPlayer.startPlayer(filePath);
             } catch (e) {
                 console.warn(e);
             }
@@ -78,7 +234,7 @@ function VoiceRecorder() {
                     console.log("📗  fileLocation :",fileLocation)
                     try {
                         const content = await RNFS.readFile(filePath, 'base64');
-                        console.log("📗  content :",content)
+                        // console.log("📗  content :",content)
                     } catch (e) {
                         console.warn(e);
 
