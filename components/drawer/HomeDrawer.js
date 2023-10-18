@@ -1,20 +1,19 @@
 import React from 'react';
-import {Button, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
+import CustomListItemButton from "../common/CustomListItemButton";
 
 function HomeDrawer({navigation}) {
   return (
-    <View>
-      <Button title={'Drawer 열기'} onPress={() => navigation.openDrawer()} />
-      <Button
-        title={'Setting 열기'}
-        onPress={() => navigation.navigate('Setting')}
-      />
-      <Button title={'Todo 열기'} onPress={() => navigation.navigate('Todo')} />
-      <Button title={'계산기 열기'} onPress={() => navigation.navigate('Calculator')} />
-      <Button title={'Mobx 연습 열기'} onPress={() => navigation.navigate('Mobx')} />
-      <Button title={'Mobx 객체 연습 열기'} onPress={() => navigation.navigate('Mobx2')} />
-      <Button title={'녹음기 열기'} onPress={() => navigation.navigate('VoiceRecorder')} />
+    <View style={{marginHorizontal: 10, marginTop: 20}}>
+      <CustomListItemButton navigation={navigation} icon={'menu'} title={'Drawer 열기'} navigate={'Todo'}/>
+      <CustomListItemButton navigation={navigation} icon={'settings'} title={'Setting 열기'} navigate={'Setting'}/>
+      <CustomListItemButton navigation={navigation} icon={'todo'} title={'Todo 열기'} navigate={'Todo'}/>
+      <CustomListItemButton navigation={navigation} icon={'menu'} title={'계산기 열기'} navigate={'Calculator'}/>
+      <CustomListItemButton navigation={navigation} icon={'menu'} title={'Mobx 연습 열기'} navigate={'Mobx'}/>
+      <CustomListItemButton navigation={navigation} icon={'menu'} title={'Mobx 객체 연습 열기'} navigate={'Mobx2'}/>
+      <CustomListItemButton navigation={navigation} icon={'menu'} title={'녹음기 열기'} navigate={'VoiceRecorder'}/>
     </View>
+
   );
 }
 
